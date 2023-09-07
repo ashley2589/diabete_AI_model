@@ -12,17 +12,6 @@ from sklearn.preprocessing import MinMaxScaler
 from sklearn.metrics import mean_squared_error
 
 
-
-
-
-# example input
-# (섭취 탄수화물)
-carbohydrate_input = 88
-
-# (사용자 id) 
-member_id_input = 1
-
-
 def perform_ai_calculations(carbohydrate, member_id):
 
     #aws mariaDB 연결 
@@ -184,12 +173,14 @@ def perform_ai_calculations(carbohydrate, member_id):
         testPredictPlot[len(trainPredict)+(look_back*2)+1:len(dataset)-1, :] = testPredict
         
         #데이터 예측 그래프 plot
-        #plt.plot(scaler.inverse_transform(dataset))
-        #plt.plot(trainPredictPlot)
-        #plt.plot(testPredictPlot)
-        #plt.show()
-        
-        #print(predict)
+        plt.plot(scaler.inverse_transform(dataset))
+        plt.plot(trainPredictPlot, label= "train")
+        plt.plot(testPredictPlot, label = "test")
+        plt.xlabel("Number of Meals")
+        plt.ylabel("Blood Sugar Level")
+        plt.legend()
+        plt.show()
+
 
 
         #다음 혈당이 목표 혈당에 비해 높게 예측 된다면 사용자의 인슐린-탄수화물비(ICR) 조정
@@ -210,6 +201,13 @@ def perform_ai_calculations(carbohydrate, member_id):
     return round_insulin_result, carbohydrate, update_icr
     
 
+# example input
+# (섭취 탄수화물)
+carbohydrate_input = 80
 
-    result = perform_ai_calculations(carbohydrate_input, member_id_input)
-    print(result)
+# (사용자 id) 
+member_id_input = 1
+
+result = perform_ai_calculations(carbohydrate_input, member_id_input)
+
+print(f"인슐린 투여량, 섭취 탄수화물, 새로운 ICR:", result)
